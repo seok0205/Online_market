@@ -13,23 +13,23 @@ from django.views.decorators.http import (
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET", "POST"])  # GET, POST 요청받을 때만 login 실행
 def login(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            auth_login(request, form.get_user())
-            next_url = request.GET.get("next") or "home"
+            auth_login(request, form.get_user())    # 로그인
+            next_url = request.GET.get("next") or "home"    # 로그인 성공하면 이동하려던 곳, 실패하면 홈 이동
             return redirect(next_url)
     else:        
         form = AuthenticationForm()
     context = {"form": form}
     return render(request, "accounts/login.html", context)
 
-@require_POST
+@require_POST   # POST 요청 시에만 logout 실행
 def logout(request):
-    if request.user.is_authenticated:
-        auth_logout(request)
+    if request.user.is_authenticated:   # user가 로그인이 된 상태라면
+        auth_logout(request)    # 로그아웃
     return redirect("home")
 
 @require_http_methods(["GET", "POST"])
@@ -37,8 +37,8 @@ def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            auth_login(request, user)
+            user = form.save()  # 새유저 정보 저장
+            auth_login(request, user)   # 가입함과 동시에 로그인
             return redirect("home")
     else:
         form = CustomUserCreationForm()
@@ -48,8 +48,8 @@ def signup(request):
 @require_POST
 def delete(request):
     if request.user.is_authenticated:
-        request.user.delete()
-        auth_logout(request)
+        request.user.delete()   # 회원 탈퇴
+        auth_logout(request)    # 세션 지우기
     return redirect("home")
 
 @require_http_methods(["GET", "POST"])
