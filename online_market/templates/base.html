@@ -15,10 +15,16 @@
                 {% csrf_token %}
                 <input type="submit" value="로그아웃">
             </form>
-        
+
+            <a href="{% url 'accounts:update' %}">
+                <button>회원정보수정 및 탈퇴</button>
+            </a>
         {% else %}
             <a href="{% url 'accounts:login' %}">
                 <button>로그인</button>
+            </a>
+            <a href="{% url 'accounts:signup'%}">
+                <button>회원가입</button>
             </a>
         {% endif %}
     </div>
