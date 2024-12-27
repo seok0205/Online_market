@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <h1>유저 정보 페이지</h1>
 
     <div>
+        {% if author.photo %}
+            <img src="/media/{{author.photo}}" />
+        {% else %}
+            <img src="/static/images/user.png" />
+        {% endif %}
         <h2>ID : {{ member.username }}</h2>
         <p>
             가입일: {{ member.date_joined|date:"Y-m-d" }}<br>
