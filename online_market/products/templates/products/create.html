@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>새 물품 등록</h1>
+
+    <form action="{% url 'products:create' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- form은 p 태그로 표현 -->
+        <button type="submit">저장</button>
+    </form>
+
+    <br/>
+    <a href="{% url 'products:products' %}">목록 보기</a>
+{% endblock content %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>마이 페이지</h1>
+    <h1>유저 정보 페이지</h1>
 
     <div>
         <h2>ID : {{ member.username }}</h2>
@@ -13,11 +13,29 @@
     </div>
     <hr/>
 
-    <h3>등록 물품</h3>
+    <h3>등록 물품: {{ products|length }}</h3>
+    {% for product in products %}
+        <ul>
+            <li>
+                <a href="{% url 'products:product_detail' product.pk %}">
+                    <p>[{{ forloop.counter }}] {{ product.name }}</p>
+                </a>
+            </li>
+        </ul>
+    {% endfor %}
     <br/>
     <hr/>
 
-    <h3>찜 목록</h3>
+    <h3>찜 목록: {{ like_products|length }}개</h3>
+    {% for like_product in like_products %}
+        <ul>
+            <li>
+                <a href="{% url 'products:product_detail' like_product.pk %}">
+                    <p>{{ like_product.name }}</p>
+                </a>
+            </li>
+        </ul>
+    {% endfor %}
     <br/>
     <hr/>
 

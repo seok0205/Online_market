@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>상품 목록</h1>
+
+    {% if request.user.is_authenticated %}
+        <br/>
+        <a href="{% url 'products:create' %}">
+            <button>새 상품 등록</button>
+        </a>
+    {% else %}
+        <br/>
+        <a href="{% url 'accounts:login' %}">
+            <button>물품 등록을 위한 로그인!</button>
+        </a>
+    {% endif %}
+    
+    <hr/>
+    {% for product in products %}
+        <!-- product_detail에 필요한 인자인 product.pk를 같이 넘겨줌 -->
+        <a href="{% url 'products:product_detail' product.pk %}">
+            <p>[ {{ product.pk }} ] {{ product.name }} - {{ product.author }}</p>
+        </a>
+        {% if request.user.is_authenticated %}
+            <form action="{% url 'products:like' product.pk %}" method="POST">
+                {% csrf_token %}
+                {% if user in product.like_users.all %}
+                    <button>찜 해제</button> 
+                {% else %}
+                    <button>찜 하기</button> 
+                {% endif %}
+        {% endif %}
+        </form>
+        <br/>
+        <hr/>
+    {% endfor %}
+    <a href="{% url 'products:home' %}">
+        <button>홈으로 돌아가기</button>
+    </a>
+{% endblock content %}

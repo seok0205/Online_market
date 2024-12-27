@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>상품 정보</h1>
+    <p>상품명: {{ product.name }}</p>
+    <p>게시자: {{ product.author.username }}</p>
+
+    {% if product.image %}
+    <img src="{{ product.image.url }}">
+    {% endif %}
+
+    <p>상품 설명: {{ product.content }}</p>
+    <p>작성 일시: {{ product.created_at }}</p>
+    <p>수정 일시: {{ product.updated_at }}</p>
+
+    <br/>
+    <br/>
+
+    <a href="{% url 'products:products' %}">
+        <button>전체 상품 목록보기</button>
+    </a>
+    <br/>
+
+    {% if user == product.author %}
+        <button>수정</button>
+
+        <br/>
+        
+        <button>삭제</button>
+    {% endif %}
+    
+{% endblock content %}

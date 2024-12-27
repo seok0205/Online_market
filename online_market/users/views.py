@@ -5,19 +5,19 @@ from django.contrib.auth import get_user_model
 from accounts.models import User
 from products.models import Product
 
-
 def users(request):
     users = User.objects.all().order_by("id")
     context = {"users": users}
     return render(request, "users/users.html", context)
 
-
 def profile(request, username):
     member = get_object_or_404(get_user_model(), username=username)
     products = Product.objects.filter(author_id=member.pk)
+    like_products = Product.objects.filter(like_users=member.pk)
     context = {
         "member": member,
         "products": products,
+        "like_products": like_products,
     }
     return render(request, "users/profile.html", context)
 
