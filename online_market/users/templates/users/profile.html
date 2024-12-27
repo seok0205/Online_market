@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>마이 페이지</h1>
+
+    <div>
+        <h2>ID : {{ member.username }}</h2>
+        <p>
+            가입일: {{ member.date_joined|date:"Y-m-d" }}<br>
+            팔로워 : {{ member.followers.count }}명
+            팔로잉 : {{ member.following.count }}명
+        </p>
+    </div>
+    <hr/>
+
+    <h3>등록 물품</h3>
+    <br/>
+    <hr/>
+
+    <h3>찜 목록</h3>
+    <br/>
+    <hr/>
+
+    {% if request.user != member %}
+        <div>
+            <form action="{% url 'users:follow' member.pk %}" method="POST">
+                {% csrf_token %}
+                {% if request.user in member.followers.all %}
+                    <button type="submit">Unfollow</button>
+                {% else %}
+                    <button type="submit">Follow</button>
+                {% endif %}
+            </form>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'users:users' %}">
+        <button>유저 목록으로 돌아가기</button>
+    </a>
+    <br/>
+    <a href="{% url 'products:home' %}">
+        <button>홈으로 돌아가기</button>
+    </a>
+{% endblock content %}
