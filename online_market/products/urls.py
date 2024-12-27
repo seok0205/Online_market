@@ -10,4 +10,7 @@ urlpatterns = [
     path('<int:pk>', views.like, name='like'),
     #
     path('create', views.create, name='create'),
+    path('<int:pk>/update/', views.update, name='update'),
+    path('<int:pk>/delete/', views.delete, name='delete'),
+    #
 ]

@@ -6,7 +6,7 @@
     <p>게시자: {{ product.author.username }}</p>
 
     {% if product.image %}
-    <img src="{{ product.image.url }}">
+        <img src="{{ product.image.url }}">
     {% endif %}
 
     <p>상품 설명: {{ product.content }}</p>
@@ -22,11 +22,14 @@
     <br/>
 
     {% if user == product.author %}
-        <button>수정</button>
-
+        <a href="{% url 'products:update' product.pk %}">
+            <button>글수정</button>
+        </a>
         <br/>
-        
-        <button>삭제</button>
+        <form action="{% url 'products:delete' product.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="글삭제">
+        </form>
     {% endif %}
     
 {% endblock content %}
