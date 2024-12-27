@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_http_methods
 from django.contrib.auth.decorators import login_required
 from .forms import ProductForm
 
@@ -49,3 +49,32 @@ def create(request):
 
     context = {"form": form}
     return render(request, "products/create.html", context)
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def update(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if product.author == request.user:
+        if request.method == "POST":    # instance라는 속성에 값이 있으면 instance 수정
+            form = ProductForm(request.POST, instance=product)
+            if form.is_valid():
+                product = form.save()
+                return redirect("products:product_detail", product.pk)
+        else:   # 없으면 새로 생성
+            form = ProductForm(instance=product)
+    else:
+        return redirect("products:products")
+
+    context = {
+        "form": form,
+        "product": product,
+    }
+    return render(request, "products/update.html", context)
+
+@require_POST
+def delete(request, pk):
+    if request.user.is_authenticated:
+        product = get_object_or_404(Product, pk=pk)
+        if product.author == request.user:
+            product.delete()
+    return redirect("products:products")
